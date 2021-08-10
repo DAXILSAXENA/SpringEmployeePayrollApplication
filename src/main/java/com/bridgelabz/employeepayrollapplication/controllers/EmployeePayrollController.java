@@ -1,5 +1,5 @@
 /**
- * Rest Controller to demonstrate the various HTTP Methods
+ * Introducing Services Layer in EmployeePayrollApp
  * 
  * @author DAXIL SAXENA
  * @since 10.08.2021
@@ -7,6 +7,7 @@
 
 package com.bridgelabz.employeepayrollapplication.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,74 +22,57 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bridgelabz.employeepayrollapplication.dto.EmployeePayrollDTO;
 import com.bridgelabz.employeepayrollapplication.dto.ResponseDTO;
 import com.bridgelabz.employeepayrollapplication.model.EmployeePayrollData;
+import com.bridgelabz.employeepayrollapplication.service.IEmployeePayrollService;
 
 @RestController
 @RequestMapping("/employeepayrollservice")
 public class EmployeePayrollController {
  
-//	Annotations for mapping web requests on methods in request-handling classes with flexible method signatures.
+	@Autowired
+	private IEmployeePayrollService employeePayrollService;
 
-//	@RequestMapping(value = { "", "/", "/get" })
-//	public ResponseEntity<String> getEmployeePayrollData() {
-//		return new ResponseEntity<String>("Get Call Success", HttpStatus.OK);
-//	}
+//	Annotations for mapping web requests on methods in request-handling classes with flexible method signatures.
 
 	@RequestMapping(value = { "", "/", "/get" })
 	// ResponseEntity used for returning JSON Object
 	public ResponseEntity<ResponseDTO> getEmployeePayrollData() {
-		EmployeePayrollData employeePayrollData = new EmployeePayrollData(1, new EmployeePayrollDTO("Pankaj", 3000));
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.getEmployeePayrollData();
 		ResponseDTO responseDTO = new ResponseDTO("Get Call Successful", employeePayrollData);
 		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
 
 //	Annotation for mapping HTTP GET requests onto specific handler methods.
-//	@GetMapping("/get/{empid}")
-//	public ResponseEntity<String> getEmployeePayrollData(@PathVariable int empid) {
-//		return new ResponseEntity<String>("Get Call Success for id: " + empid, HttpStatus.OK);
-//	}
 
 	@GetMapping("/get/{empId}")
 	public ResponseEntity<ResponseDTO> getEmployeePayrollData(@PathVariable("empId") int empId) {
-		EmployeePayrollData employeePayrollData = new EmployeePayrollData(empId,
-				new EmployeePayrollDTO("Pankaj", 3000));
+		EmployeePayrollData employeePayrollData = employeePayrollService.getEmployeePayrollDataById(empId);
 		ResponseDTO responseDTO = new ResponseDTO("Get Call For ID Successful", employeePayrollData);
 		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
 
 //	Annotation for mapping HTTP POST requests onto specific handler methods.
-//	@PostMapping("/create")
-//	public ResponseEntity<String> addEmployeePayrollData(@RequestBody EmployeePayrollDTO employeePayrollDTO) {
-//		return new ResponseEntity<String>("Created Employee Payroll Data for:" + employeePayrollDTO, HttpStatus.OK);
-//	}
-
+	
 	@PostMapping("/create")
 	public ResponseEntity<ResponseDTO> addEmployeePayrollData(@RequestBody EmployeePayrollDTO employeePayrollDTO) {
-		EmployeePayrollData employeePayrollData = new EmployeePayrollData(1, employeePayrollDTO);
+		EmployeePayrollData employeePayrollData = employeePayrollService.createEmployeePayrollData(employeePayrollDTO);
 		ResponseDTO responseDTO = new ResponseDTO("Create Call For Employee Successful", employeePayrollData);
 		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
 
 //	Annotation for mapping HTTP PUT requests onto specific handler methods.
-//	@PutMapping("/update")
-//	public ResponseEntity<String> updateEmployeePayrollData(@RequestBody EmployeePayrollDTO employeePayrollDTO) {
-//		return new ResponseEntity<String>("Updated Employee Payroll Data for:" + employeePayrollDTO, HttpStatus.OK);
-//	}
 
 	@PutMapping("/update")
 	public ResponseEntity<ResponseDTO> updateEmployeePayrollData(@RequestBody EmployeePayrollDTO employeePayrollDTO) {
-		EmployeePayrollData employeePayrollData = new EmployeePayrollData(1, employeePayrollDTO);
+		EmployeePayrollData employeePayrollData = employeePayrollService.updateEmployeePayrollData(employeePayrollDTO);
 		ResponseDTO responseDTO = new ResponseDTO("Update Call For Employee Successful", employeePayrollData);
 		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
 
 //	Annotation for mapping HTTP DELETE requests onto specific handler methods.
-//	@DeleteMapping("/delete/{empid}")
-//	public ResponseEntity<String> deleteEmployeePayrollData(@PathVariable int empid) {
-//		return new ResponseEntity<String>("Delete Call Success for id: " + empid, HttpStatus.OK);
-//	}
 
 	@DeleteMapping("/delete/{empId}")
 	public ResponseEntity<ResponseDTO> deleteEmployeePayrollData(@PathVariable("empId") int empId) {
+		employeePayrollService.deleteEmployeePayrollData(empId);
 		ResponseDTO responseDTO = new ResponseDTO("Deleted Successfully", "Deleted id: " + empId);
 		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
