@@ -9,7 +9,7 @@ public class EmployeePayrollData {
 	private String name;
 	private long salary;
 
-	public EmployeePayrollData() {}
+	public EmployeePayrollData() {} 
 
 	public EmployeePayrollData(int empId, EmployeePayrollDTO employeePayrollDTO) {
 		this.employeeId = empId;
