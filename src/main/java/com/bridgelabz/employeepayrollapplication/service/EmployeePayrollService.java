@@ -1,3 +1,4 @@
+/** EmployeePayrollService.java */
 package com.bridgelabz.employeepayrollapplication.service;
 
 import java.util.ArrayList;
@@ -11,30 +12,34 @@ import com.bridgelabz.employeepayrollapplication.model.EmployeePayrollData;
 @Service
 public class EmployeePayrollService implements IEmployeePayrollService {
 
+	private List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+
 	public EmployeePayrollData createEmployeePayrollData(EmployeePayrollDTO employeePayrollDTO) {
-		EmployeePayrollData employeePayrollData = new EmployeePayrollData(1, employeePayrollDTO);
+		EmployeePayrollData employeePayrollData = new EmployeePayrollData(employeePayrollList.size() + 1,
+				employeePayrollDTO);
+		employeePayrollList.add(employeePayrollData);
 		return employeePayrollData;
 	}
 
 	public EmployeePayrollData getEmployeePayrollDataById(int empId) {
-		EmployeePayrollData employeePayrollData = new EmployeePayrollData(empId,
-				new EmployeePayrollDTO("Pankaj", 30000));
-		return employeePayrollData;
+		return employeePayrollList.get(empId - 1);
 	}
 
-	public EmployeePayrollData updateEmployeePayrollData(EmployeePayrollDTO employeePayrollDTO) {
-		EmployeePayrollData employeePayrollData = new EmployeePayrollData(1, employeePayrollDTO);
+	public EmployeePayrollData updateEmployeePayrollData(int empID, EmployeePayrollDTO employeePayrollDTO) {
+		EmployeePayrollData employeePayrollData = this.getEmployeePayrollDataById(empID);
+		employeePayrollData.setName(employeePayrollDTO.name);
+		employeePayrollData.setSalary(employeePayrollDTO.salary);
+		employeePayrollList.set(empID - 1, employeePayrollData);
 		return employeePayrollData;
 	}
 
 	public List<EmployeePayrollData> getEmployeePayrollData() {
-		List<EmployeePayrollData> employeePayrollDataList = new ArrayList<EmployeePayrollData>();
-		employeePayrollDataList.add(new EmployeePayrollData(1, new EmployeePayrollDTO("Pankaj", 3000)));
-		return employeePayrollDataList;
+		return employeePayrollList;
 	}
 
 	public void deleteEmployeePayrollData(int empId) {
-		
+		employeePayrollList.remove(empId - 1);
+
 	}
 
 }

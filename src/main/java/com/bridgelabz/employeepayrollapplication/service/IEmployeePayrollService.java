@@ -1,3 +1,4 @@
+/** IEmployeePayrollService.java */
 package com.bridgelabz.employeepayrollapplication.service;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface IEmployeePayrollService {
 
 	EmployeePayrollData getEmployeePayrollDataById(int empId);
 
-	EmployeePayrollData updateEmployeePayrollData(EmployeePayrollDTO employeePayrollDTO);
+	EmployeePayrollData updateEmployeePayrollData(int empId, EmployeePayrollDTO employeePayrollDTO);
 
 	List<EmployeePayrollData> getEmployeePayrollData();
 

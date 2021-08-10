@@ -1,11 +1,13 @@
 /**
- * Introducing Services Layer in EmployeePayrollApp
+ * Added ArrayList in Service Layer to store EmployeePayrollData
  * 
  * @author DAXIL SAXENA
  * @since 10.08.2021
  */
 
 package com.bridgelabz.employeepayrollapplication.controllers;
+
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +29,7 @@ import com.bridgelabz.employeepayrollapplication.service.IEmployeePayrollService
 @RestController
 @RequestMapping("/employeepayrollservice")
 public class EmployeePayrollController {
- 
+
 	@Autowired
 	private IEmployeePayrollService employeePayrollService;
 
@@ -51,7 +53,7 @@ public class EmployeePayrollController {
 	}
 
 //	Annotation for mapping HTTP POST requests onto specific handler methods.
-	
+
 	@PostMapping("/create")
 	public ResponseEntity<ResponseDTO> addEmployeePayrollData(@RequestBody EmployeePayrollDTO employeePayrollDTO) {
 		EmployeePayrollData employeePayrollData = employeePayrollService.createEmployeePayrollData(employeePayrollDTO);
@@ -61,9 +63,11 @@ public class EmployeePayrollController {
 
 //	Annotation for mapping HTTP PUT requests onto specific handler methods.
 
-	@PutMapping("/update")
-	public ResponseEntity<ResponseDTO> updateEmployeePayrollData(@RequestBody EmployeePayrollDTO employeePayrollDTO) {
-		EmployeePayrollData employeePayrollData = employeePayrollService.updateEmployeePayrollData(employeePayrollDTO);
+	@PutMapping("/update/{empId}")
+	public ResponseEntity<ResponseDTO> updateEmployeePayrollData(@PathVariable("empId") int empId,
+			@RequestBody EmployeePayrollDTO employeePayrollDTO) {
+		EmployeePayrollData employeePayrollData = employeePayrollService.updateEmployeePayrollData(empId,
+				employeePayrollDTO);
 		ResponseDTO responseDTO = new ResponseDTO("Update Call For Employee Successful", employeePayrollData);
 		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
